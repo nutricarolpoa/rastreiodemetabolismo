@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Teste do Metabolismo Travado</title>
+
+<style>
+:root{
+  --bg:#F6F1EA;
+  --card:#FFFFFF;
+  --border:#E6D9CC;
+  --shadow:rgba(0,0,0,.08);
+
+  --text:#2B2621;
+  --muted:#6E5B4B;
+
+  --brand:#8B5E3C;
+  --brand-dark:#734B30;
+
+  --accent:#6B7A4E;
+  --accent-dark:#55613E;
+
+  --radius:16px;
+  --soft:#FBF8F5;
+  --soft2:#FFFDFB;
+
+  --font: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  background:var(--bg);
+  font-family: var(--font);
+  color:var(--text);
+  padding:14px;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(10px)}
+  to{opacity:1; transform:none}
+}
+
+.container{
+  max-width:760px;
+  margin:0 auto;
+  padding-bottom: 92px;
+  animation:fadeIn .45s ease-out;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:22px;
+  box-shadow:0 10px 30px var(--shadow);
+  padding:22px;
+}
+
+.header{
+  text-align:center;
+  margin-bottom:12px;
+}
+
+.header h1{
+  margin:0;
+  color:var(--brand);
+  font-size:22px;
+  font-weight:700;
+  letter-spacing:.2px;
+}
+
+.header p{
+  margin:6px 0 0;
+  font-size:13px;
+  color:var(--muted);
+  font-weight:500;
+}
+
+.header a{
+  color:var(--brand);
+  font-weight:700;
+  text-decoration:none;
+}
+.header a:hover{ text-decoration:underline; }
+
+h2{
+  text-align:center;
+  margin:10px 0 6px;
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:.2px;
+}
+
+.desc{
+  text-align:center;
+  color:var(--muted);
+  margin:0 0 14px;
+  font-size:14px;
+  line-height:1.5;
+  font-weight:500;
+}
+
+label{
+  display:block;
+  margin:12px 0 6px;
+  font-size:13px;
+  font-weight:600;
+  color:#3E342D;
+}
+
+input[type="text"], input[type="tel"]{
+  width:100%;
+  padding:14px 14px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  font-size:16px;
+  background:#fff;
+  font-weight:500;
+}
+
+input:focus{
+  outline:none;
+  border-color:rgba(139,94,60,.55);
+  box-shadow:0 0 0 3px rgba(139,94,60,.12);
+}
+
+hr{
+  border:none;
+  height:1px;
+  background:var(--border);
+  margin:18px 0;
+}
+
+/* Progresso */
+.progressWrap{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  background: var(--soft);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:10px 12px;
+  margin: 12px 0 14px;
+}
+
+.progressText{
+  font-size:12.5px;
+  font-weight:700;
+  color:#3A312B;
+  white-space:nowrap;
+}
+
+.progressBar{
+  flex:1;
+  height:10px;
+  border-radius:999px;
+  background:#EFE4D9;
+  overflow:hidden;
+}
+
+.progressFill{
+  height:100%;
+  width:0%;
+  background: rgba(107,122,78,.95);
+  border-radius:999px;
+  transition: width .25s ease;
+}
+
+/* Perguntas */
+.question{
+  background:var(--soft);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:16px;
+  margin-bottom:12px;
+  transition: .2s ease;
+}
+
+.question.active{
+  background: var(--soft2);
+  border-color: rgba(139,94,60,.35);
+  box-shadow: 0 8px 22px rgba(139,94,60,.08);
+}
+
+.question strong{
+  display:block;
+  margin-bottom:12px;
+  font-weight:700;
+  line-height:1.35;
+  letter-spacing:.1px;
+}
+
+/* Desktop: grade */
+.options{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap:12px;
+}
+
+/* Opção */
+.option{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 14px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  background:#fff;
+  cursor:pointer;
+  transition: transform .08s ease, border-color .15s ease, background .15s ease;
+}
+
+.option:hover{
+  border-color:rgba(139,94,60,.45);
+  background:#FFFDFB;
+  transform:translateY(-1px);
+}
+
+.option input[type="radio"]{
+  width:18px;
+  height:18px;
+  flex:0 0 auto;
+  accent-color: var(--accent);
+}
+
+.option .optText{
+  flex:1;
+  font-size:14px;
+  line-height:1.25;
+  font-weight:600;
+  color:#2B2621;
+}
+
+.option:has(input:checked){
+  border-color:rgba(107,122,78,.75);
+  background:rgba(107,122,78,.09);
+}
+
+/* Botões */
+button{
+  width:100%;
+  border:none;
+  border-radius:16px;
+  padding:16px;
+  font-size:15.5px;
+  font-weight:700;
+  cursor:pointer;
+  transition:background .15s ease, transform .06s ease;
+}
+
+button:active{ transform:translateY(1px); }
+
+.btn-main{ background:var(--brand); color:#fff; }
+.btn-main:hover{ background:var(--brand-dark); }
+
+.btn-whats{ background:var(--accent); color:#fff; }
+.btn-whats:hover{ background:var(--accent-dark); }
+
+/* Resultado */
+.result{
+  display:none;
+  margin-top:18px;
+  background:#fff;
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:18px;
+}
+
+.badge{
+  display:inline-block;
+  padding:6px 12px;
+  border-radius:999px;
+  background:rgba(107,122,78,.14);
+  border:1px solid rgba(107,122,78,.30);
+  font-size:12px;
+  font-weight:700;
+  color:#2B3A22;
+}
+
+.result h3{
+  margin:10px 0 8px;
+  font-size:18px;
+  font-weight:700;
+}
+
+.result p{
+  margin:0 0 12px;
+  color:#4E4037;
+  line-height:1.65;
+  font-size:14px;
+  font-weight:500;
+  white-space: pre-line; /* ✅ quebra de linha bonita */
+}
+
+.questionFinal{
+  margin-top:12px;
+  margin-bottom:14px; /* ✅ respiro do botão */
+  padding:14px 14px;
+  border-radius:16px;
+  background: #FBF8F5;
+  border:1px solid var(--border);
+  font-weight:650;
+  color:#3A312B;
+  line-height:1.45;
+}
+
+/* CTA fixo mobile */
+.mobileCta{
+  position:fixed;
+  left:0; right:0; bottom:0;
+  padding:10px 12px;
+  background: rgba(246,241,234,.92);
+  backdrop-filter: blur(8px);
+  border-top:1px solid var(--border);
+  display:none;
+}
+.mobileCtaInner{ max-width:760px; margin:0 auto; }
+
+/* Mobile */
+@media(max-width:640px){
+  body{ padding:12px; }
+  .card{ padding:18px; border-radius:22px; }
+  .options{ grid-template-columns: 1fr; }
+  #btnDesktop{ display:none; }
+  .mobileCta{ display:block; }
+  button{ padding:16px; font-size:16px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="card">
+
+    <div class="header">
+      <h1>Nutricionista Ana Caroline</h1>
+      <p>CRN2 19644 · <a href="https://instagram.com/nutricarolpoa" target="_blank" rel="noopener">@nutricarolpoa</a></p>
+    </div>
+
+    <h2>Teste do Metabolismo Travado</h2>
+    <p class="desc">Responda em menos de 1 minuto e descubra o que pode estar bloqueando seu emagrecimento.</p>
+
+    <div class="progressWrap" aria-live="polite">
+      <div class="progressText" id="progressText">Respondidas 0 de 6</div>
+      <div class="progressBar">
+        <div class="progressFill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <label>Seu nome</label>
+    <input id="nome" type="text" placeholder="Ex: Ana" />
+
+    <label>WhatsApp</label>
+    <input id="telefone" type="tel" placeholder="DDD + número (ex: 51998673867)" inputmode="numeric" />
+
+    <hr>
+
+    <div id="questions"></div>
+
+    <button class="btn-main" id="btnDesktop">Ver meu resultado</button>
+
+    <div class="result" id="resultado">
+      <div class="badge" id="badge"></div>
+      <h3 id="tituloRes"></h3>
+      <p id="textoRes"></p>
+      <div class="questionFinal" id="perguntaFinal"></div>
+      <button class="btn-whats" id="btnWhats">Enviar meu resultado para a nutri</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="mobileCta">
+  <div class="mobileCtaInner">
+    <button class="btn-main" id="btnMobile">Ver meu resultado</button>
+  </div>
+</div>
+
+<script>
+const URL_SCRIPT = "https://script.google.com/macros/s/AKfycbzrm-GkS0cSuwHoOG4JP8pARoFWDpoGwl7QJMzQzNf5PT-TL8wM0CjFBp1vKFGkgfs/exec";
+
+const perguntas = [
+  ["Quantas dietas diferentes você já tentou nos últimos 5 anos?", ["1–2 dietas","3–5 dietas","6–10 dietas","Mais de 10 dietas"]],
+  ["Qual o tempo máximo que você conseguiu manter uma dieta restritiva?", ["Menos de 1 semana","1–4 semanas","1–3 meses","Mais de 3 meses"]],
+  ["Com que frequência você sente compulsão alimentar quando está fazendo dieta?", ["Raramente","1–2 vezes por semana","3–4 vezes por semana","Quase todos os dias"]],
+  ["Como você se sente fisicamente quando corta drasticamente as calorias?", ["Normal e energizada","Um pouco cansada","Muito cansada e irritada","Exausta e com dores de cabeça"]],
+  ["Após parar uma dieta, com que velocidade você recupera o peso perdido?", ["Não recupero","Em alguns meses","Em algumas semanas","Em poucos dias"]],
+  ["Há quantos anos você tenta emagrecer com dietas?", ["Menos de 2 anos","2–5 anos","5–10 anos","Mais de 10 anos"]]
+];
+
+const pesos = [1,2,3,4];
+
+/* ✅ Respostas com mais valor + dores + mini estratégias */
+const blocos = [
+  {
+    faixa: "0–25%",
+    titulo: "Seu metabolismo ainda responde bem",
+    texto:
+      "Você está no melhor ponto possível: seu corpo ainda responde quando existe estratégia.\n" +
+      "O que geralmente atrapalha aqui não é “metabolismo”, é rotina quebrada: começa forte, fica rígida demais, depois perde o controle e vem culpa.\n\n" +
+      "3 ajustes simples que destravam muito rápido:\n" +
+      "1) Proteína no café da manhã (ovo, iogurte, queijo) pra diminuir fome e belisco.\n" +
+      "2) Prato com volume no almoço: metade legumes + uma proteína + carbo medido.\n" +
+      "3) Doce com hora marcada (após almoço/jantar) em vez de beliscar ao longo do dia.",
+    pergunta: "Você quer um caminho claro pra perder peso sem travar lá na frente?"
+  },
+  {
+    faixa: "26–50%",
+    titulo: "Seu corpo já está criando defesas",
+    texto:
+      "Seu resultado mostra que seu corpo já aprendeu a se defender de dietas.\n" +
+      "É aquela fase em que você se esforça, corta coisas, fica “boa a semana inteira”… e mesmo assim a balança não responde como deveria.\n\n" +
+      "Aqui, o erro mais comum é tentar resolver com mais restrição, e isso vira:\n" +
+      "• mais fome no fim do dia\n" +
+      "• mais vontade de doce\n" +
+      "• mais estresse e menos resultado\n\n" +
+      "3 estratégias que ajudam de verdade:\n" +
+      "1) Regularidade: comer pouco o dia inteiro e exagerar à noite trava muito.\n" +
+      "2) Carbo com companhia: pão/massa/arroz sempre com proteína e fibra junto.\n" +
+      "3) Sono e estresse: dormir pouco muda fome e compulsão em muita gente.",
+    pergunta: "Quer que eu te explique melhor como destravar teu metabolismo?"
+  },
+  {
+    faixa: "51–75%",
+    titulo: "Seu corpo está em modo proteção",
+    texto:
+      "Esse nível costuma aparecer em quem sente: “eu faço certo… mas meu corpo não vai”.\n" +
+      "É comum ter estagnação mesmo com dieta, compulsão, ansiedade com comida e retenção.\n\n" +
+      "Aqui, o corpo não precisa de mais corte. Ele precisa de segurança.\n" +
+      "E segurança, na prática, vem de previsibilidade.\n\n" +
+      "3 coisas que destravam sem te prender:\n" +
+      "1) Parar o 8 ou 80 (segunda perfeita e sábado caos).\n" +
+      "2) Refeição âncora: escolher 1 refeição do dia pra ser sempre organizada.\n" +
+      "3) Lanche planejado: quando não planeja, você belisca; quando planeja, você escolhe.",
+    pergunta: "Se eu olhar seu histórico, eu consigo te dizer onde está o travamento principal. Você quer que eu analise?"
+  },
+  {
+    faixa: "76–100%",
+    titulo: "Seu metabolismo está altamente travado",
+    texto:
+      "Se você caiu aqui, provavelmente você já tentou de tudo e está cansada de se culpar.\n" +
+      "Esse nível não é falta de força de vontade. É o corpo em modo sobrevivência.\n\n" +
+      "É comum sentir: fome desregulada, baixa energia, ansiedade e peso que volta rápido.\n\n" +
+      "3 primeiros passos que fazem diferença:\n" +
+      "1) Aumentar qualidade e constância antes de reduzir calorias.\n" +
+      "2) Organizar intestino e rotina (fibra, ultraprocessados e sono).\n" +
+      "3) Plano que caiba na vida, senão o corpo entra em alerta de novo.",
+    pergunta: "Quer que eu te diga por onde começar sem cair em mais uma dieta restrita?"
+  }
+];
+
+let ultimoResultado = null;
+
+function onlyDigits(v){ return (v || "").replace(/\D/g,""); }
+
+function getRadio(name){
+  const el = document.querySelector(`input[name="${name}"]:checked`);
+  return el ? Number(el.value) : null;
+}
+
+function buildQuestions(){
+  const qDiv = document.getElementById("questions");
+  qDiv.innerHTML = "";
+
+  perguntas.forEach((p, i) => {
+    let html = `<div class="question" data-q="${i}">
+      <strong>${i+1}) ${p[0]}</strong>
+      <div class="options" role="radiogroup" aria-label="Pergunta ${i+1}">`;
+
+    p[1].forEach((opt, j) => {
+      html += `
+        <label class="option">
+          <input type="radio" name="q${i}" value="${pesos[j]}" />
+          <span class="optText">${opt}</span>
+        </label>`;
+    });
+
+    html += `</div></div>`;
+    qDiv.innerHTML += html;
+  });
+
+  document.querySelectorAll('.question').forEach(q => {
+    q.addEventListener('click', () => setActiveQuestion(q));
+  });
+
+  document.querySelectorAll('input[type="radio"]').forEach(r => {
+    r.addEventListener('change', () => {
+      const qEl = r.closest('.question');
+      setActiveQuestion(qEl);
+      updateProgress();
+    });
+  });
+
+  updateProgress();
+}
+
+function setActiveQuestion(qEl){
+  document.querySelectorAll('.question').forEach(x => x.classList.remove('active'));
+  if(qEl) qEl.classList.add('active');
+}
+
+function updateProgress(){
+  let answered = 0;
+  for(let i=0;i<6;i++){
+    if (document.querySelector(`input[name="q${i}"]:checked`)) answered++;
+  }
+  const percent = Math.round((answered/6)*100);
+  document.getElementById("progressText").innerText = `Respondidas ${answered} de 6`;
+  document.getElementById("progressFill").style.width = percent + "%";
+}
+
+function enviarParaPlanilha(payload){
+  const url = new URL(window.location.href);
+  const utm_source   = url.searchParams.get("utm_source")   || "";
+  const utm_medium   = url.searchParams.get("utm_medium")   || "";
+  const utm_campaign = url.searchParams.get("utm_campaign") || "";
+  const utm_content  = url.searchParams.get("utm_content")  || "";
+  const utm_term     = url.searchParams.get("utm_term")     || "";
+  const utm_id       = url.searchParams.get("utm_id")       || "";
+  const fbclid       = url.searchParams.get("fbclid")       || "";
+
+  const qs =
+    `?tipo=${encodeURIComponent(payload.tipo)}` +
+    `&nome=${encodeURIComponent(payload.nome)}` +
+    `&telefone=${encodeURIComponent(payload.telefone)}` +
+    `&score=${encodeURIComponent(payload.score)}` +
+    `&percent=${encodeURIComponent(payload.percent)}` +
+    `&nivel=${encodeURIComponent(payload.nivel)}` +
+    `&utm_source=${encodeURIComponent(utm_source)}` +
+    `&utm_medium=${encodeURIComponent(utm_medium)}` +
+    `&utm_campaign=${encodeURIComponent(utm_campaign)}` +
+    `&utm_content=${encodeURIComponent(utm_content)}` +
+    `&utm_term=${encodeURIComponent(utm_term)}` +
+    `&utm_id=${encodeURIComponent(utm_id)}` +
+    `&fbclid=${encodeURIComponent(fbclid)}` +
+    `&t=${Date.now()}`;
+
+  const img = new Image();
+  img.src = URL_SCRIPT + qs;
+}
+
+function calcular(){
+  const nome = document.getElementById("nome").value.trim();
+  const telefone = onlyDigits(document.getElementById("telefone").value);
+
+  if(nome.length < 2){ alert("Coloque seu nome 🙂"); return; }
+  if(telefone.length < 10){ alert("Coloque seu WhatsApp com DDD 🙂"); return; }
+
+  let soma = 0;
+  for(let i=0;i<6;i++){
+    const v = getRadio("q"+i);
+    if(v === null){ alert("Responda todas as perguntas 🙂"); return; }
+    soma += v;
+  }
+
+  const percent = Math.round(((soma - 6) / (24 - 6)) * 100);
+  const idx = percent <= 25 ? 0 : percent <= 50 ? 1 : percent <= 75 ? 2 : 3;
+  const bloco = blocos[idx];
+
+  document.getElementById("badge").innerText = `${bloco.faixa} · Resultado ${percent}%`;
+  document.getElementById("tituloRes").innerText = bloco.titulo;
+  document.getElementById("textoRes").innerText = bloco.texto;
+  document.getElementById("perguntaFinal").innerText = bloco.pergunta;
+
+  const box = document.getElementById("resultado");
+  box.style.display = "block";
+  box.scrollIntoView({behavior:"smooth", block:"start"});
+
+  ultimoResultado = { nome, telefone, percent, titulo: bloco.titulo, faixa: bloco.faixa };
+
+  enviarParaPlanilha({
+    tipo: "teste_metabolismo_travado",
+    nome,
+    telefone,
+    score: soma,
+    percent,
+    nivel: bloco.titulo
+  });
+}
+
+function abrirWhats(){
+  if(!ultimoResultado){ alert("Faça o teste para gerar o resultado 🙂"); return; }
+
+  const msg =
+`Oi Ana 😊 me chamo ${ultimoResultado.nome}.
+
+Acabei de fazer o Teste do Metabolismo Travado.
+Meu resultado foi: ${ultimoResultado.titulo} (${ultimoResultado.percent}%).
+
+Quero entender meu caso e qual seria o melhor primeiro passo agora.`;
+
+  window.open("https://wa.me/5551998673867?text=" + encodeURIComponent(msg), "_blank");
+}
+
+document.getElementById("btnDesktop").addEventListener("click", calcular);
+document.getElementById("btnMobile").addEventListener("click", calcular);
+document.getElementById("btnWhats").addEventListener("click", abrirWhats);
+
+buildQuestions();
+</script>
+</body>
+</html>
